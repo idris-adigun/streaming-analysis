@@ -1,4 +1,3 @@
-import os
 import asyncio
 import network.listener as listener
 from log_monitor.monitor import monitor_file
@@ -7,16 +6,16 @@ import config.env as env
 
 log_file_path = env.LOG_PATH
 
-def monitorlogfile():
+def monitor_logfile():
     asyncio.run(monitor_file(log_file_path))
 
-def networklistner():
+def network_listener():
     asyncio.run(listener.main())
     
 if __name__ == "__main__":
-    listnening_process = Process(target = networklistner)
-    listnening_process.start()
-    monitoring_process = Process(target = monitorlogfile)
+    listening_process = Process(target = network_listener)
+    listening_process.start()
+    monitoring_process = Process(target = monitor_logfile)
     monitoring_process.start()
-    listnening_process.join()
+    listening_process.join()
     monitoring_process.join()
