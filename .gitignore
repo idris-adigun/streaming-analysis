@@ -3,3 +3,4 @@ __pycache__
 
 #binary files
 *.pyc
+src/network/__pycache__/listener.cpython-310.pyc
