@@ -2,8 +2,8 @@ version: "3.3"
 
 services:
   monitor:
-    image: test_monitor:1.0.1
-    container_name: test_monitor
+    image: network_monitor:1.0.1
+    container_name: network_monitor
     ports:
       - "514:514/tcp"
       - "514:514/udp"
