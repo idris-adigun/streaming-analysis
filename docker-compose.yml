@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   monitor:
-    image: network_monitor:1.0.1
+    image: network_monitor:1.0.0
     container_name: network_monitor
     ports:
       - "514:514/tcp"
