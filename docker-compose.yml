@@ -5,10 +5,10 @@ services:
     image: network_monitor:1.0.0
     container_name: network_monitor
     ports:
-      - "514:514/tcp"
-      - "514:514/udp"
+      - "5432:5432/tcp"
+      - "5432:5432/udp"
     environment:
-      PORTS: "514"
+      PORTS: "5432"
       LOG_PATH: "/app/logs/data.log"
     restart: always
     network_mode: "bridge"

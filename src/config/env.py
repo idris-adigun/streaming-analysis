@@ -1,7 +1,7 @@
 import os
 
 # Ports to monitor
-ports_env = os.getenv('PORTS', '514,515,516')
+ports_env = os.getenv('PORTS', '5432')
 PORTS = [int(port.strip()) for port in ports_env.split(',')]
 
 # log file path
