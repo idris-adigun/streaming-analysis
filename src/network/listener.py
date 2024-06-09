@@ -5,13 +5,13 @@ import sys
 import json
 import time
 import config.logger as logger
+import config.env as env
 
 # Define the file to which data will be appended
-file_path = 'incoming_data.log'
+log_file_path = env.LOG_PATH
 
 # Get ports from environment variable
-ports_env = os.getenv('PORTS', '514,515,516')
-ports = [int(port.strip()) for port in ports_env.split(',')]
+ports = env.PORTS
 
 # Asynchronous function to handle incoming TCP connections
 async def handle_tcp_client(reader, writer):
@@ -54,7 +54,7 @@ class UDPServerProtocol:
 def append_to_file(data):
     timestamp = int(time.time())
     message_dict = {"timestamp": timestamp, "message": data}
-    with open(file_path, 'a') as file:
+    with open(log_file_path, 'a') as file:
         logger.logInfo('Appending data to file')
         json.dump(message_dict, file)
         file.write('\n')  # Add newline for readability
