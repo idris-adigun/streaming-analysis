@@ -1,6 +1,7 @@
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+import config.logger as logger
 
 class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, file_path):
@@ -15,9 +16,8 @@ class FileChangeHandler(FileSystemEventHandler):
         if event.src_path == self.file_path:
             new_lines = self._get_new_lines()
             if new_lines:
-                print('New lines added:')
                 for line in new_lines:
-                    print(line, end='')
+                    logger.logInfo(f'Logger Monitor: New lines added : {line}')
 
     def _get_new_lines(self):
         current_lines = self._read_lines()
@@ -36,7 +36,3 @@ def monitor_file(file_path):
     except KeyboardInterrupt:
         observer.stop()
     observer.join()
-
-if __name__ == "__main__":
-    file_path = 'path/to/your/file.txt'  # Replace with the path to your file
-    monitor_file(file_path)
