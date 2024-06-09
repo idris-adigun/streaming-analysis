@@ -1,0 +1,14 @@
+version: "3.3"
+
+services:
+  monitor:
+    image: test_monitor:1.0.1
+    container_name: test_monitor
+    ports:
+      - "514:514/tcp"
+      - "514:514/udp"
+    environment:
+      PORTS: "514"
+      LOG_PATH: "/app/logs/data.log"
+    restart: always
+    network_mode: "bridge"
