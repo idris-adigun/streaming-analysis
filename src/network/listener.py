@@ -4,6 +4,7 @@ import signal
 import sys
 import json
 import time
+import config.logger as logger
 
 # Define the file to which data will be appended
 file_path = 'incoming_data.log'
@@ -19,11 +20,13 @@ async def handle_tcp_client(reader, writer):
         if not data:
             break
         try:
+            logger.logInfo('Deconding data...')
             decoded_data = data.decode('utf-8')
+            logger.logInfo('Data decoded')
             append_to_file(decoded_data)
         except UnicodeDecodeError:
             # Handle corrupted data
-            print("Corrupted TCP data received and ignored")
+            logger.logInfo('Corrupted TCP data received and ignored')
     writer.close()
     await writer.wait_closed()
 
@@ -46,12 +49,13 @@ class UDPServerProtocol:
             append_to_file(decoded_data)
         except UnicodeDecodeError:
             # Handle corrupted data
-            print("Corrupted UDP data received and ignored")
+            logger.logInfo('Corrupted UDP data received and ignored')
 
 def append_to_file(data):
     timestamp = int(time.time())
     message_dict = {"timestamp": timestamp, "message": data}
     with open(file_path, 'a') as file:
+        logger.logInfo('Appending data to file')
         json.dump(message_dict, file)
         file.write('\n')  # Add newline for readability
 
@@ -61,17 +65,20 @@ async def main():
 
     # Create TCP servers for each port
     for port in ports:
+        logger.logInfo(f'TCP: Listening on port - {port}')
         server = await asyncio.start_server(handle_tcp_client, '0.0.0.0', port)
         servers.append(server)
         tasks.append(asyncio.create_task(server.serve_forever()))
 
     # Create UDP servers for each port
     for port in ports:
+        logger.logInfo(f'UDP: Listening on port - {port}')
         udp_transport = await handle_udp_server(port)
         servers.append(udp_transport)
     
     # Add graceful shutdown handling
     async def shutdown(signal, loop):
+        logger.logError(f"Received exit signal {signal.name}...")
         print(f"Received exit signal {signal.name}...")
         for task in tasks:
             task.cancel()
