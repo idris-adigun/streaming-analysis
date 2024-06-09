@@ -15,6 +15,8 @@ ports = env.PORTS
 
 # Asynchronous function to handle incoming TCP connections
 async def handle_tcp_client(reader, writer):
+    client_addr = writer.get_extra_info('peername')
+    client_ip, client_port = client_addr
     while True:
         data = await reader.read(100)
         if not data:
@@ -23,7 +25,7 @@ async def handle_tcp_client(reader, writer):
             logger.logInfo('Deconding data...')
             decoded_data = data.decode('utf-8')
             logger.logInfo('Data decoded')
-            append_to_file(decoded_data)
+            append_to_file(decoded_data, client_ip, client_port)
         except UnicodeDecodeError:
             # Handle corrupted data
             logger.logInfo('Corrupted TCP data received and ignored')
@@ -44,16 +46,17 @@ class UDPServerProtocol:
         self.transport = transport
 
     def datagram_received(self, data, addr):
+        client_ip, client_port = addr
         try:
             decoded_data = data.decode('utf-8')
-            append_to_file(decoded_data)
+            append_to_file(decoded_data, client_ip, client_port)
         except UnicodeDecodeError:
             # Handle corrupted data
             logger.logInfo('Corrupted UDP data received and ignored')
 
-def append_to_file(data):
+def append_to_file(data, client_ip, client_port):
     timestamp = int(time.time())
-    message_dict = {"timestamp": timestamp, "message": data}
+    message_dict = {"timestamp": timestamp, "message": data, "ip": client_ip, "port": client_port}
     with open(log_file_path, 'a') as file:
         logger.logInfo('Appending data to file')
         json.dump(message_dict, file)
