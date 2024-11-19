@@ -101,13 +101,13 @@ To set up the development environment, follow these steps:
 1. Clone the repository:
 
 ```sh
-git clone <repository-url>
+git clone [<repository-url>](https://github.com/idris-adigun/streaming-analysis/)
 ```
 
 2. Navigate to the project directory:
 
 ```sh
-cd <project-directory>
+cd streaming-analysis
 ```
 
 3. Install the dependencies:
