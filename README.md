@@ -119,9 +119,5 @@ pip install -r requirements.txt
 4. Run the application:
 
 ```sh
-python src/main.py
+python3 src/main.py
 ```
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
